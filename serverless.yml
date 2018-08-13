@@ -1,0 +1,43 @@
+service: goodies-server
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-central-1
+  profile: privat
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}*
+
+  environment:
+    GOODIES_RECIPES_TABLE: ${self:service}-${self:provider.stage}-recipes
+
+functions:
+  graphql:
+    handler: dist/src/graphql.handler
+    events:
+      - http:
+          path: graphql
+          method: post
+
+resources:
+  Resources:
+    RecipeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.GOODIES_RECIPES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5

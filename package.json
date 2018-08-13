@@ -1,0 +1,25 @@
+{
+  "name": "goodies-server",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Dennis Skoko <dennis.skoko@hotmail.com>",
+  "scripts": {
+    "start": "nodemon --watch build --watch res/schema.gql --exec serverless offline start",
+    "deploy": "serverless deploy",
+    "build": "tsc",
+    "build:w": "tsc -w"
+  },
+  "dependencies": {
+    "apollo-server-lambda": "^2.0.0",
+    "aws-sdk": "^2.291.0",
+    "graphql": "^0.13.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.11",
+    "@types/graphql": "^0.13.4",
+    "@types/node": "^10.5.8",
+    "nodemon": "^1.18.3",
+    "serverless-offline": "^3.25.7",
+    "typescript": "^3.0.1"
+  }
+}
