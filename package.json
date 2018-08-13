@@ -5,6 +5,7 @@
   "author": "Dennis Skoko <dennis.skoko@hotmail.com>",
   "scripts": {
     "start": "nodemon --watch build --watch res/schema.gql --exec serverless offline start",
+    "test": "echo 'No tests currently implemented' && exit 0",
     "deploy": "serverless deploy",
     "build": "tsc",
     "build:w": "tsc -w",
