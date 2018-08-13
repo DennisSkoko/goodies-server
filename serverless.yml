@@ -7,7 +7,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-central-1
-  profile: privat
+  state: ${opt:stage, 'dev'}
 
   iamRoleStatements:
     - Effect: Allow
