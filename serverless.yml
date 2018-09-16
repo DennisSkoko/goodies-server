@@ -1,0 +1,21 @@
+service: goodies-server
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-central-1
+  state: ${opt:stage, 'dev'}
+
+functions:
+  graphql:
+    handler: src/graphql.handler
+    events:
+      - http:
+          path: graphql
+          method: get
+      - http:
+          path: graphql
+          method: post
