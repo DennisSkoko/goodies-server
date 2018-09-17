@@ -9,6 +9,15 @@ provider:
   region: eu-central-1
   state: ${opt:stage, 'dev'}
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:service}*
+
+  environment:
+    GOODIES_RECIPES_TABLE: ${self:service}-${self:provider.stage}-recipes
+
 functions:
   graphql:
     handler: src/graphql.handler
@@ -19,3 +28,19 @@ functions:
       - http:
           path: graphql
           method: post
+
+resources:
+  Resources:
+    RecipeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.GOODIES_RECIPES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
