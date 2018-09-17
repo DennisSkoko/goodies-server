@@ -1,6 +1,9 @@
 'use strict'
 
 const { gql } = require('apollo-server-lambda')
+const _ = require('lodash/fp')
+const db = require('../db')
+const { toCamelCase } = require('../util')
 
 module.exports.typeDef = gql`
 type Recipe {
@@ -15,15 +18,11 @@ extend type Query {
 
 module.exports.resolvers = {
   Query: {
-    recipes: () => [
-      {
-        id: '1',
-        name: 'Soppa'
-      },
-      {
-        id: '2',
-        name: 'Kyckling'
-      }
-    ]
+    recipes: () => db.scan({
+      TableName: process.env.GOODIES_RECIPES_TABLE
+    })
+      .promise()
+      .then(_.get('Items'))
+      .then(_.map(toCamelCase))
   }
 }
