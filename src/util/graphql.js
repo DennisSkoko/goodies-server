@@ -5,6 +5,7 @@ const _ = require('lodash/fp')
 
 const root = gql`
 type Query
+type Mutation
 `
 
 module.exports = {
