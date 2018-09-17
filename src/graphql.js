@@ -3,7 +3,7 @@
 require('./config')
 
 const { ApolloServer } = require('apollo-server-lambda')
-const { createConfigFromModels } = require('./util/graphql')
+const { createConfigFromModels } = require('./util')
 const models = require('./models')
 
 const server = new ApolloServer({
