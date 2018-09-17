@@ -2,4 +2,4 @@
 
 const { DynamoDB } = require('aws-sdk')
 
-export const db = new DynamoDB.DocumentClient()
+module.exports = new DynamoDB.DocumentClient()
