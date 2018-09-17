@@ -3,11 +3,16 @@ service: goodies-server
 plugins:
   - serverless-offline
 
+package:
+  include:
+    - src/**
+
 provider:
   name: aws
   runtime: nodejs8.10
   region: eu-central-1
-  state: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'dev'}
+  profile: ${opt:profile, 'default'}
 
   iamRoleStatements:
     - Effect: Allow
