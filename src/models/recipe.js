@@ -28,6 +28,7 @@ input RecipeStepInput {
 
 extend type Query {
   recipes: [Recipe!]
+  recipe(id: ID!): Recipe
 }
 
 extend type Mutation {
@@ -47,6 +48,22 @@ module.exports.resolvers = {
           ...recipe,
           steps: recipe.Steps.map(toCamelCase)
         }))
+      ),
+
+    recipe: (_root, { id }) => db.get({
+      TableName: process.env.GOODIES_RECIPES_TABLE,
+      Key: {
+        Id: id
+      }
+    })
+      .promise()
+      .then(_.get('Item'))
+      .then(recipe => recipe
+        ? toCamelCase({
+          ...recipe,
+          steps: recipe.Steps.map(toCamelCase)
+        })
+        : null
       )
   },
 
