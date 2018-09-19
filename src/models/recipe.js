@@ -10,14 +10,24 @@ module.exports.typeDef = gql`
 type Recipe {
   id: ID!
   name: String!
+  steps: [RecipeStep!]!
 }
 
-extend type Query {
-  recipes: [Recipe!]
+type RecipeStep {
+  instructions: String!
 }
 
 input RecipeInput {
   name: String!
+  steps: [RecipeStepInput!]!
+}
+
+input RecipeStepInput {
+  instructions: String!
+}
+
+extend type Query {
+  recipes: [Recipe!]
 }
 
 extend type Mutation {
@@ -32,18 +42,27 @@ module.exports.resolvers = {
     })
       .promise()
       .then(_.get('Items'))
-      .then(_.map(toCamelCase))
+      .then(
+        _.map(recipe => toCamelCase({
+          ...recipe,
+          steps: recipe.Steps.map(toCamelCase)
+        }))
+      )
   },
 
   Mutation: {
     createRecipe: (_root, { recipe: data }) => {
-      const recipe = Object.assign(data, {
+      const recipe = {
+        ...data,
         id: uuid()
-      })
+      }
 
       return db.put({
         TableName: process.env.GOODIES_RECIPES_TABLE,
-        Item: toPascalCase(recipe)
+        Item: toPascalCase({
+          ...recipe,
+          steps: data.steps.map(toPascalCase)
+        })
       })
         .promise()
         .then(() => recipe)
