@@ -15,4 +15,8 @@ const server = new ApolloServer({
   tracing: !IS_PROD
 })
 
-module.exports.handler = server.createHandler()
+module.exports.handler = server.createHandler({
+  cors: {
+      origin: true
+  }
+})
