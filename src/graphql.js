@@ -17,6 +17,8 @@ const server = new ApolloServer({
 
 module.exports.handler = server.createHandler({
   cors: {
-      origin: true
+    origin: true,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
   }
 })
